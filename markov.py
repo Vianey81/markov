@@ -45,11 +45,15 @@ def make_text(chains):
     """Takes dictionary of markov chains; returns random text."""
 
     text = ""
-    all_tuples = chains.keys()
-    current_tuple = choice(all_tuples)
+    all_upper_tuples = []
+    for a_tuple in chains.keys():
+        if a_tuple[0][0].isupper():
+            all_upper_tuples.append(a_tuple)
+    current_tuple = choice(all_upper_tuples)
     text += current_tuple[0] + " " + current_tuple[1] + " "
 
-    while current_tuple in chains:
+    end_punctuation = [".", "?", "!"]
+    while current_tuple in chains and current_tuple[1][-1] not in end_punctuation:
         rand_word = choice(chains[current_tuple])
         text += rand_word + " "
         current_tuple = (current_tuple[1], rand_word)
