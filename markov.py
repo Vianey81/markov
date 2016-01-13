@@ -27,26 +27,38 @@ def make_chains(text_string):
         {('hi', 'there'): ['mary', 'juanita'], ('there', 'mary'): ['hi'], ('mary', 'hi': ['there']}
     """
 
+# search string for first space, call it pos_1
+# set everything before first space to word_1
+# search from pos_1+1 until first space, call it pos_2
+# set everything between pos_1 and pos_2 to word_2
+#  search from pos_2+1 until first space, call it pos_3
+# set everything between pos_2 and pos_3 to word_3
+# do our thing with adding stuff to dictionary
+# make word_1 = word_2, word_2 = word_3, same for positions
+# loop from search pos_2 for next space
 
     chains = {}
+    # 
     all_words = text_string.split()
-    n_gram_length = 4
-    # stop in range will be related to number of words in tuple
+    n_gram_length = 2
     for index in range(0, len(all_words)-n_gram_length):
         n_gram = []
         for word in range(index,index+n_gram_length):
             n_gram.append(all_words[word])
-        # n_gram will loop through indices, and +0 up to n-1
         n_gram = tuple(n_gram)
-        # next_word will be at [index+n]
         next_word = all_words[index+n_gram_length]
-        # change bi_gram to n_gram, through this whole chunk
         if n_gram in chains:
             chains[n_gram].append(next_word)
         else:
             chains[n_gram] = [next_word]  
     return chains
-
+# empty dictionary
+# get 3 words
+# put 2 words in dictionary as key and third as value
+# get new_word
+# word_1 = word_2, then word_2 = word_3, then word_3 = new_word
+# see if (word_1, word_2) in dictionary, if not add, if so append
+# go until no words left
 
 def make_text(chains):
     """Takes dictionary of markov chains; returns random text."""
