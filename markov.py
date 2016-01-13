@@ -30,14 +30,21 @@ def make_chains(text_string):
 
     chains = {}
     all_words = text_string.split()
-    for index in range(0, len(all_words)-2):
-        bi_gram = (all_words[index], all_words[index+1])
-        next_word = all_words[index+2]
-        if bi_gram in chains:
-            chains[bi_gram].append(next_word)
+    n_gram_length = 4
+    # stop in range will be related to number of words in tuple
+    for index in range(0, len(all_words)-n_gram_length):
+        n_gram = []
+        for word in range(index,index+n_gram_length):
+            n_gram.append(all_words[word])
+        # n_gram will loop through indices, and +0 up to n-1
+        n_gram = tuple(n_gram)
+        # next_word will be at [index+n]
+        next_word = all_words[index+n_gram_length]
+        # change bi_gram to n_gram, through this whole chunk
+        if n_gram in chains:
+            chains[n_gram].append(next_word)
         else:
-            chains[bi_gram] = [next_word]  
-
+            chains[n_gram] = [next_word]  
     return chains
 
 
@@ -50,13 +57,18 @@ def make_text(chains):
         if a_tuple[0][0].isupper():
             all_upper_tuples.append(a_tuple)
     current_tuple = choice(all_upper_tuples)
-    text += current_tuple[0] + " " + current_tuple[1] + " "
+    for word in current_tuple:
+        text += word + " "
 
     end_punctuation = [".", "?", "!"]
-    while current_tuple in chains and current_tuple[1][-1] not in end_punctuation:
+    while current_tuple in chains and current_tuple[-1][-1] not in end_punctuation:
         rand_word = choice(chains[current_tuple])
         text += rand_word + " "
-        current_tuple = (current_tuple[1], rand_word)
+        #loop in current_tuple to get the words from 1 to len(current_tuple) and add rand_word
+        new_tuple = list(current_tuple)
+        new_tuple.pop(0)
+        new_tuple.append(rand_word)
+        current_tuple = tuple(new_tuple)
 
     return text
 
